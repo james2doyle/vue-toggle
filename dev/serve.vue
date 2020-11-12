@@ -72,6 +72,7 @@
           <img class="slider-image" src="https://placehold.it/400x250?text=slide+2" />
         </div>
       </transition-group>
+      <br />
       <div class="slider-controls">
         <button type="button" @click="setState(state - 1 < 0 ? 0 : state - 1)">Back</button>&nbsp;
         <button type="button" @click="setState(state + 1 > 2 ? 2 : state + 1)">Next</button>
