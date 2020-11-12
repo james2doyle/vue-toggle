@@ -12,18 +12,18 @@ Check out [the website for demos](https://james2doyle.github.io/vue-toggle).
 ## Installation
 
 ```bash
-npm install -S vue-toggle
+npm install -S vue-ui-toggle
 ```
 
 ```javascript
-const Toggle = require('vue-toggle'); // es5/node
-// import Toggle from 'vue-toggle'; // es6
+const Toggle = require('vue-ui-toggle'); // es5/node
+// import Toggle from 'vue-ui-toggle'; // es6
 
 Vue.component('toggle', Toggle);
 ```
 
 ```javascript
-import Toggle from 'vue-toggle';
+import Toggle from 'vue-ui-toggle';
 
 export default {
   // ...
