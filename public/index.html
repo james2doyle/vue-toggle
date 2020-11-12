@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Vue Toggle</title>
+  <meta name="description" content="Vue component to create UI and UX elements with toggleable states" />
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="author" content="James Doyle" />
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+  <script src="./toggle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.3/new.min.css">
+  <style type="text/css" media="screen">
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      min-width: 100vw;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto 5rem;
+      padding: 0 2rem;
+    }
+    .container .hljs {
+      background: none;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .5s ease;
+      will-change: opacity;
+    }
+
+    .fade-enter, .fade-leave-to {
+      opacity: 0;
+    }
+
+    .slider-wrapper {
+      position: relative;
+      width: 400px;
+      height: 250px;
+      overflow: visible;
+    }
+
+    .slider-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      vertical-align: top;
+    }
+
+    .slider-enter-active, .slider-leave-active {
+      transition: all 1s;
+      will-change: opacity, transform;
+    }
+
+    .slider-enter {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .slider-leave-to {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <c class="output" id="html-output"><h1><a id="toggle" class="anchor" aria-hidden="true" href="#toggle"></a>Toggle</h1>
+<blockquote>
+<p>A simple UI state toggle for Vue.js</p>
+</blockquote>
+<p>With a simple toggle, you can build almost any UI experience. Think about experiences like show/hide, accordions, nested menus, and even sliders, they mostly revolve around a single piece of state.</p>
+<h2><a id="demos" class="anchor" aria-hidden="true" href="#demos"></a>Demos</h2>
+<h3>Example: show/hide</h3>
+
+    <toggle #default="{ state, toggle }">
+      <p v-if="state === false">I am showing by default</p>
+      <p v-else>I will show when state is true</p>
+      <button type="button" @click.prevent="toggle">Toggle State</button>
+    </toggle>
+
+    <h3>Example: show/hide with transitions</h3>
+
+    <toggle #default="{ state, toggle }">
+      <transition name="fade" appear>
+        <p v-if="state === false">I am showing by default</p>
+        <p v-else>I will show when state is true</p>
+      </transition>
+      <button type="button" @click.prevent="toggle">Toggle State</button>
+    </toggle>
+
+    <h3>Example: accordion</h3>
+
+    <toggle #default="{ state, setState }">
+      <div class="accordion">
+        <button type="button" @click="setState('tab-1')">Tab 1</button>&nbsp;
+        <button type="button" @click="setState('tab-2')">Tab 2</button>&nbsp;
+        <button type="button" @click="setState('tab-3')">Tab 3</button>
+        <div v-if="state === 'tab-1'">Content for tab-1</div>
+        <div v-if="state === 'tab-2'">Content for tab-2</div>
+        <div v-if="state === 'tab-3'">Content for tab-3</div>
+      </div>
+    </toggle>
+
+    <h3>Example: nested toggles</h3>
+
+    <toggle #default="{ state, toggle }">
+      <button type="button" @click.prevent="toggle">Next Level</button>
+      <div v-if="state">
+        <p>I am nested at level 1</p>
+        <toggle #default="{ state, toggle }">
+          <button type="button" @click.prevent="toggle">Next Level</button>
+          <div v-if="state">
+            <p>I am nested at level 2</p>
+            <toggle #default="{ state, toggle }">
+              <button type="button" @click.prevent="toggle">Next Level</button>
+              <div v-if="state">
+                <p>I am nested at level 3</p>
+                <toggle #default="{ state, toggle }">
+                  <button type="button" @click.prevent="toggle">Next Level</button>
+                  <div v-if="state">
+                    <p>I am nested at level 4</p>
+                  </div>
+                </toggle>
+              </div>
+            </toggle>
+          </div>
+        </toggle>
+      </div>
+    </toggle>
+
+    <h3>Example: slider</h3>
+
+    <toggle #default="{ state, setState }" :initial-state="0">
+      <transition-group name="slider" tag="div" class="slider-wrapper">
+        <div :key="0" v-show="state === 0">
+          <img class="slider-image" src="https://placehold.it/400x250?text=slide+0" />
+        </div>
+        <div :key="1" v-show="state === 1">
+          <img class="slider-image" src="https://placehold.it/400x250?text=slide+1" />
+        </div>
+        <div :key="2" v-show="state === 2">
+          <img class="slider-image" src="https://placehold.it/400x250?text=slide+2" />
+        </div>
+      </transition-group>
+      <div class="slider-controls">
+        <button type="button" @click="setState(state - 1 < 0 ? 0 : state - 1)">Back</button>&nbsp;
+        <button type="button" @click="setState(state + 1 > 2 ? 2 : state + 1)">Next</button>
+      </div>
+    </toggle>
+<h2><a id="installation" class="anchor" aria-hidden="true" href="#installation"></a>Installation</h2>
+<pre><code class="language-bash hljs">npm install -S vue-toggle
+</code></pre>
+<pre><code class="language-javascript hljs"><span class="hljs-keyword">const</span> Toggle = <span class="hljs-built_in">require</span>(<span class="hljs-string">'vue-toggle'</span>); <span class="hljs-comment">// es5/node</span>
+<span class="hljs-comment">// import Toggle from 'vue-toggle'; // es6</span>
+
+Vue.component(<span class="hljs-string">'toggle'</span>, Toggle);
+</code></pre>
+<pre><code class="language-javascript hljs"><span class="hljs-keyword">import</span> Toggle <span class="hljs-keyword">from</span> <span class="hljs-string">'vue-toggle'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">components</span>: {
+    Toggle,
+  },
+  <span class="hljs-comment">// ...</span>
+};
+</code></pre>
+<h2><a id="examples" class="anchor" aria-hidden="true" href="#examples"></a>Examples</h2>
+<p><b>Example: show/hide</b></p>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state === false"</span>&gt;</span>I am showing by default<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-else</span>&gt;</span>I will show when state is true<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Toggle State<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+</code></pre>
+<p><b>Example: show/hide with transitions</b></p>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"fade"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state === false"</span>&gt;</span>I am showing by default<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">v-else</span>&gt;</span>I will show when state is true<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">transition</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Toggle State<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+</code></pre>
+<p><b>Example: accordion</b></p>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, setState }"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"accordion"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"setState('tab-1')"</span>&gt;</span>Tab 1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"setState('tab-2')"</span>&gt;</span>Tab 2<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"setState('tab-3')"</span>&gt;</span>Tab 3<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state === 'tab-1'"</span>&gt;</span>Content for tab-1<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state === 'tab-2'"</span>&gt;</span>Content for tab-2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state === 'tab-3'"</span>&gt;</span>Content for tab-3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+</code></pre>
+<p><b>Example: nested toggles</b></p>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Next Level<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>I am nested at level 1<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Next Level<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>I am nested at level 2<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Next Level<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>I am nested at level 3<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, toggle }"</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click.prevent</span>=<span class="hljs-string">"toggle"</span>&gt;</span>Next Level<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">"state"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>I am nested at level 4<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+</code></pre>
+<p><b>Example: slider</b></p>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toggle</span> #<span class="hljs-attr">default</span>=<span class="hljs-string">"{ state, setState }"</span> <span class="hljs-attr">:initial-state</span>=<span class="hljs-string">"0"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">transition-group</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"slider"</span> <span class="hljs-attr">tag</span>=<span class="hljs-string">"div"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"slider-wrapper"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">"0"</span> <span class="hljs-attr">v-show</span>=<span class="hljs-string">"state === 0"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"slider-image"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://placehold.it/400x250?text=slide+0"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">"1"</span> <span class="hljs-attr">v-show</span>=<span class="hljs-string">"state === 1"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"slider-image"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://placehold.it/400x250?text=slide+1"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">"2"</span> <span class="hljs-attr">v-show</span>=<span class="hljs-string">"state === 2"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"slider-image"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://placehold.it/400x250?text=slide+2"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">transition-group</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"slider-controls"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"setState(state - 1 &lt; 0 ? 0 : state - 1)"</span>&gt;</span>Back<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"setState(state + 1 &gt; 2 ? 2 : state + 1)"</span>&gt;</span>Next<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">toggle</span>&gt;</span>
+</code></pre>
+</c>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+  new Vue({
+    el: '#app',
+  });
+</script>
+</body>
+</html>
