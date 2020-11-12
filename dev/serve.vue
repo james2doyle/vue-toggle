@@ -22,9 +22,9 @@
 
     <toggle #default="{ state, setState }">
       <div class="accordion">
-        <button type="button" @click="setState('tab-1')">Tab 1</button>&nbsp;
-        <button type="button" @click="setState('tab-2')">Tab 2</button>&nbsp;
-        <button type="button" @click="setState('tab-3')">Tab 3</button>
+        <button type="button" @click.prevent="setState('tab-1')">Tab 1</button>&nbsp;
+        <button type="button" @click.prevent="setState('tab-2')">Tab 2</button>&nbsp;
+        <button type="button" @click.prevent="setState('tab-3')">Tab 3</button>
         <div v-if="state === 'tab-1'">Content for tab-1</div>
         <div v-if="state === 'tab-2'">Content for tab-2</div>
         <div v-if="state === 'tab-3'">Content for tab-3</div>
@@ -74,8 +74,8 @@
       </transition-group>
       <br />
       <div class="slider-controls">
-        <button type="button" @click="setState(state - 1 < 0 ? 0 : state - 1)">Back</button>&nbsp;
-        <button type="button" @click="setState(state + 1 > 2 ? 2 : state + 1)">Next</button>
+        <button type="button" @click.prevent="setState(state - 1 < 0 ? 0 : state - 1)">Back</button>&nbsp;
+        <button type="button" @click.prevent="setState(state + 1 > 2 ? 2 : state + 1)">Next</button>
       </div>
     </toggle>
   </div>
